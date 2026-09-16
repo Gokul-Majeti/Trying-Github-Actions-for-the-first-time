@@ -1,0 +1,23 @@
+name: Daily Date Logger
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC
+  workflow_dispatch: # Allows you to run it manually from the website to test it
+
+jobs:
+  log-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Append current date
+        run: |
+          date >> dates.txt
+          
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Append daily date"
+          file_pattern: dates.txt
